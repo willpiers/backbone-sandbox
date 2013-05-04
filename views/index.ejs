@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <div id="application"></div>
+    <ul id="list-of-books"></ul>
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+
+    <script>
+    	$(document).ready(function() {
+
+    		var Book = Backbone.Model.extend({
+    			
+    		});
+
+            var Library = Backbone.Collection.extend({
+                url : '/api/books'
+            });
+
+            var BookView = Backbone.View.extend({
+                tagName: 'li',
+                render: function(model) {
+                    this.$el.html(this.model.get('author'));
+                    $('#list-of-books').append(this.$el);
+                    return this;
+                }
+            });
+
+            var LibraryView = Backbone.View.extend({
+                // render: function() {
+                //     alert('outside');
+                //     _.each(this.collection, this.addOne());
+                // },
+                // addOne: function(model) {
+                //     alert('inside');
+                //     var view = new BookView({ model : model });
+                //     view.render();
+                // }
+            });
+
+    		var a_book = new Book();
+    		a_book.url = '/api/books/3';
+
+
+            a_book.fetch({
+                success: function() {
+                    $('#list-of-books').append("<li>fuck you man</li>");
+                    var bookView = new BookView({ model: a_book });
+                    bookView.render();
+                }
+            });
+
+
+            var some_books = new Library();
+            some_books.fetch();
+            console.log(some_books);
+            some_books.forEach(function(book) {
+                alert('why is this function not being run');
+                var view = new BookView({ model : book });
+                view.render();
+            });
+            // var libraryView = new LibraryView({ collection : some_books });
+            // libraryView.render();
+        });
+    </script>
+  </body>
+</html>
